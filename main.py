@@ -1,5 +1,5 @@
 import math
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, url_for
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
@@ -12,6 +12,12 @@ if not MONGO_URI:
     raise ValueError("MONGO_URI not found in .env file!")
 
 app = Flask(__name__)
+
+app.add_url_rule(
+    "/favicon.ico",
+    endpoint="favicon",
+    redirect_to="static/images/favicon.ico",
+)
 
 
 def run():

@@ -8,138 +8,26 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="apple-touch-icon" sizes="1024x1024" href="static/images/logo.png">
-  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap JS Bundle (with Popper) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: Arial, sans-serif;
-      background: #f0f0f0;
-      color: #222;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-    }
-    .container {
-      background: white;
-      padding: 30px 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      max-width: 400px;
-      width: 100%;
-    }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 25px;
-    }
-    label {
-      display: block;
-      font-size: 1.25rem;
-      margin-bottom: 10px;
-      text-align: left;
-    }
-    select, input[type="number"], input[type="text"] {
-      width: 100%;
-      font-size: 1.2rem;
-      padding: 10px 12px;
-      margin-bottom: 25px;
-      border: 1.5px solid #ccc;
-      border-radius: 6px;
-      box-sizing: border-box;
-      transition: border-color 0.3s ease;
-    }
-    select:focus, input[type="number"]:focus, input[type="text"]:focus {
-      outline: none;
-      border-color: #007bff;
-    }
-    button {
-      font-size: 1.4rem;
-      padding: 12px 20px;
-      width: 100%;
-      background-color: #007bff;
-      border: none;
-      color: white;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .radio-group {
-      margin-bottom: 25px;
-      text-align: left;
-      font-size: 1.25rem;
-    }
-    .radio-group label {
-      display: inline-block;
-      margin-right: 20px;
-      cursor: pointer;
-    }
-    input[type="radio"] {
-      margin-right: 6px;
-      transform: scale(1.3);
-      vertical-align: middle;
-    }
-    @media (max-width: 450px) {
-      h1 {
-        font-size: 2rem;
-      }
-      label, .radio-group {
-        font-size: 1.1rem;
-      }
-      select, input[type="number"], input[type="text"] {
-        font-size: 1rem;
-      }
-      button {
-        font-size: 1.2rem;
-      }
-    }
-    .calculator-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      background-color: #007bff;
-      color: white;
-      font-size: 1.7rem;
-      border: none;
-      border-radius: 50%;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-      z-index: 1000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: background-color 0.3s ease;
-    }
-    .calculator-btn:hover {
-      background-color: #0056b3;
-    }
-  </style>
+  <link rel="stylesheet" href="static/css/style.css">
 </head>
 
 <body>
   <div class="container">
-    <h1>Add Points to RFID Card</h1>
+    <h1>Vendy's Admin Portal</h1>
     <form action="/add_points" method="POST">
       <div class="radio-group">
         <label><input type="radio" name="operation" value="add" checked /> Add Points</label>
         <label><input type="radio" name="operation" value="subtract" /> Subtract Points</label>
       </div>
 
-      <label for="user_type">User Type:</label>
+      <label for="user_type">Point Type:</label>
       <select id="user_type" name="user_type" required>
         <option value="n">Normal Points</option>
         <option value="p">Premium Points</option>
@@ -169,13 +57,22 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="calc-form">
+          <div class="mb-3">
+            <label for="modeSelect" class="form-label">Mode:</label>
+            <select id="modeSelect" class="form-select">
+              <option value="dollarsToPoints">Dollars → Points</option>
+              <option value="pointsToDollars">Points → Dollars</option>
+            </select>
+          </div>
+
+          <!-- Dollars to Points Form -->
+          <form id="calc-form" style="display: block;">
             <div class="mb-3">
               <label for="calc_dollars" class="form-label">Dollar Amount:</label>
               <input type="number" step="0.01" min="1" class="form-control" id="calc_dollars" required>
             </div>
             <div class="mb-3">
-              <label class="form-label">User Type:</label><br />
+              <label class="form-label">Point Type:</label><br />
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="calc_user_type" id="normalUser" value="n" checked>
                 <label class="form-check-label" for="normalUser">Normal</label>
@@ -188,15 +85,14 @@
             <div class="alert alert-info" id="points_result" style="display:none;"></div>
           </form>
 
-          <hr>
-
-          <form id="reverse-calc-form">
+          <!-- Points to Dollars Form -->
+          <form id="reverse-calc-form" style="display: none;">
             <div class="mb-3">
               <label for="calc_points" class="form-label">Points:</label>
               <input type="number" min="1" class="form-control" id="calc_points" required>
             </div>
             <div class="mb-3">
-              <label class="form-label">User Type:</label><br />
+              <label class="form-label">Point Type:</label><br />
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="rev_user_type" id="rev_normalUser" value="n" checked>
                 <label class="form-check-label" for="rev_normalUser">Normal</label>
@@ -212,94 +108,6 @@
       </div>
     </div>
   </div>
-
-  <!-- JS Logic for Calculator -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const dollarInput = document.getElementById("calc_dollars");
-      const userTypeRadios = document.querySelectorAll("input[name='calc_user_type']");
-      const resultBox = document.getElementById("points_result");
-
-      const pointInput = document.getElementById("calc_points");
-      const revUserRadios = document.querySelectorAll("input[name='rev_user_type']");
-      const dollarResultBox = document.getElementById("dollar_result");
-
-      function updatePoints() {
-        const dollars = parseFloat(dollarInput.value);
-        const userType = document.querySelector("input[name='calc_user_type']:checked").value;
-
-        if (!dollars || dollars < 1) {
-          resultBox.style.display = "none";
-          return;
-        }
-
-        fetch("/calculate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            dollars: dollars,
-            premium: userType === "p"
-          })
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.points !== undefined) {
-            resultBox.textContent = `Estimated Points: ${data.points}`;
-            resultBox.style.display = "block";
-          } else {
-            resultBox.textContent = "Error calculating points.";
-            resultBox.style.display = "block";
-          }
-        })
-        .catch(() => {
-          resultBox.textContent = "Error calculating points.";
-          resultBox.style.display = "block";
-        });
-      }
-
-      function reverseCalculateDollars() {
-        const targetPoints = parseFloat(pointInput.value);
-        const isPremium = document.querySelector("input[name='rev_user_type']:checked").value === "p";
-
-        if (!targetPoints || targetPoints < 1) {
-          dollarResultBox.style.display = "none";
-          return;
-        }
-
-        let low = 1, high = 10000, mid, found = null;
-
-        const tryDollars = (d) => {
-          const baseRate = isPremium ? 3 : 5;
-          const bonus = Math.log2(d) * (isPremium ? 1 : 2);
-          return baseRate * d + bonus;
-        };
-
-        for (let i = 0; i < 30; i++) {
-          mid = (low + high) / 2;
-          const est = tryDollars(mid);
-          if (est < targetPoints) {
-            low = mid;
-          } else {
-            high = mid;
-            found = mid;
-          }
-        }
-
-        if (found) {
-          dollarResultBox.textContent = `Approximate Dollar Amount: $${found.toFixed(2)}`;
-          dollarResultBox.style.display = "block";
-        } else {
-          dollarResultBox.textContent = "Could not approximate.";
-          dollarResultBox.style.display = "block";
-        }
-      }
-
-      dollarInput.addEventListener("input", updatePoints);
-      userTypeRadios.forEach(r => r.addEventListener("change", updatePoints));
-
-      pointInput.addEventListener("input", reverseCalculateDollars);
-      revUserRadios.forEach(r => r.addEventListener("change", reverseCalculateDollars));
-    });
-  </script>
 </body>
+  <script src="static/js/script.js"></script>
 </html>

@@ -1,0 +1,14 @@
+{
+    "name": "Vendy's",
+    "short_name": "Vendy's",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "icons": [
+        {
+          "src": "static/images/logo.png",
+          "sizes": "1024x1024",
+          "type": "image/png"
+        }
+      ]
+}

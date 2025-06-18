@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Result</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="apple-touch-icon" sizes="{{ url_for('static', filename='logo.png') }}">
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      color: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 25px;
+    }
+    p {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      word-wrap: break-word;
+    }
+    a {
+      font-size: 1.3rem;
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+      border: 2px solid #007bff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: inline-block;
+    }
+    a:hover {
+      background-color: #007bff;
+      color: white;
+    }
+    @media (max-width: 450px) {
+      h1 {
+        font-size: 2rem;
+      }
+      p, a {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Result</h1>
+    <p>{{ message }}</p>
+    <a href="/">Add More Points</a>
+  </div>
+</body>
+</html>
